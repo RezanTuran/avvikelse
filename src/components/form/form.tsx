@@ -5,9 +5,11 @@ import {
   Button,
   Typography,
   useMediaQuery,
+  TextareaAutosize,
 } from '@material-ui/core';
 import useStyles from './styles';
 import Axios from 'axios';
+import Rapports from '../rapports/rapports';
 
 const Form = () => {
   const isMobile = useMediaQuery('(min-width:767px)');
@@ -55,7 +57,7 @@ const Form = () => {
     formData.append('quantity', quantity);
     formData.append('otherinfo', otherInfo);
 
-    const url = 'http://localhost:80/';
+    const url = 'http://localhost:80/insert.php/';
     Axios.post(url, formData)
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
@@ -231,9 +233,8 @@ const Form = () => {
           Exempel: väntan för avlastning i butik, försening på grund av
           omständigheter.
         </Typography>
-        <TextField
-          type="text"
-          variant="outlined"
+        <TextareaAutosize
+          rows={10}
           className={classes.input}
           onChange={(e) => {
             setOtherInfo(e.target.value);
@@ -249,6 +250,8 @@ const Form = () => {
           Skicka
         </Button>
       </Grid>
+
+      <Rapports />
     </Grid>
   );
 };
