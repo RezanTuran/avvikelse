@@ -1,11 +1,5 @@
 <?php
-// DB Connection
-$serverName = "localhost";
-$username = "root";
-$password = "root";
-$database = "react_php";
-
-$conn = mysqli_connect($serverName, $username, $password,$database);
+include 'db.php';
 
 $firstname = $_POST['name'];
 $surename = $_POST['surename'];
@@ -35,6 +29,8 @@ if(mysqli_query($conn, $query)){
 }else{
     echo "Error";
 }
+
+
 
 ?>
 
