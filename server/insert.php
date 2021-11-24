@@ -4,6 +4,7 @@ include 'db.php';
 $firstname = $_POST['name'];
 $surename = $_POST['surename'];
 $phonenumber = $_POST['phonenumber'];
+$drivingType = $_POST['drivingtype'];
 $drivernumber = $_POST['drivernumber'];
 $loadnumber = $_POST['loadnumber'];
 $date = $_POST['date'];
@@ -19,16 +20,28 @@ $storeName = $_POST['storename'];
 $city = $_POST['city'];
 $quantity = $_POST['quantity'];
 $otherinfo = $_POST['otherinfo'];
+$waittimeomexport = $_POST['waittimeomexport'];
+$includedload = $_POST['includedload'];
+$loadnotrady = $_POST['loadnotrady'];
 
-$query = "INSERT INTO avvikelse 
+$query = "INSERT INTO avvikelseKungalv 
 (firstName,sureName,phoneNumber,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeEmptyGoods,requireTime,mileage,storeName,city,quantity,otherInfo) 
 VALUES('$firstname','$surename','$phonenumber','$drivernumber','$loadnumber','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeemptygoods','$requireTime','$mileage','$storeName','$city','$quantity','$otherinfo')";
 
+$sql = "INSERT INTO avvikelseHelsingborg 
+(firstName,sureName,phoneNumber,drivingType,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeOmexPort,includedLoad,loadNotRady,otherInfo) 
+VALUES('$firstname','$surename','$phonenumber','$drivingType','$drivernumber','$loadnumber','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeomexport','$includedload','$loadnotrady','$otherinfo')";
+
 if(mysqli_query($conn, $query)){
     echo "Data has been inserted successfully";
-}else{
+}
+else if(mysqli_query($conn, $sql)){
+    echo "Data has been inserted successfully SQLLL";
+}
+else{
     echo "Error";
 }
+
 
 
 
