@@ -4,7 +4,7 @@ include 'db.php';
 
 switch ($method) {
     case 'GET':
-      $sql = "SELECT * FROM avvikelse"; 
+      $sql = "SELECT * FROM avvikelseKungalv"; 
       break;
 }
 // run SQL statement
