@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
-import Form from './components/form';
 import { Grid } from '@material-ui/core';
-
+import Home from './pages/home';
+import Router from './router';
 function App() {
   return (
     <Grid className="App">
-      <Form />
+      <Home />
+      <Router />
     </Grid>
   );
 }
