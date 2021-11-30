@@ -43,11 +43,12 @@ const Form = () => {
     let formData = new FormData();
 
     if (pickup === true) {
-      formData.append('drivingtype', 'Helsingborg');
+      formData.append('drivingtype', 'Hämtning Helsingborg');
     }
     if (distribution === true) {
       formData.append('drivingtype', 'Distribution');
     }
+
     formData.append('name', firstName);
     formData.append('surename', sureName);
     formData.append('phonenumber', phoneNumber);
@@ -70,13 +71,13 @@ const Form = () => {
       .catch((err) => console.log(err));
   };
 
-  function sendEmail(e: any) {
+  const sendEmail = (e: any) => {
     e.preventDefault();
     sendRapport(e);
     emailjs
       .sendForm(
         'service_b33p05r',
-        'template_m1ypj2a',
+        'template_556aefp',
         e.target,
         'user_NqjwPyD6lDtwweTdX8Bmu'
       )
@@ -89,7 +90,7 @@ const Form = () => {
         }
       );
     e.target.reset();
-  }
+  };
 
   return (
     <Grid>
@@ -229,7 +230,7 @@ const Form = () => {
             <TextField
               type="number"
               label="Uppsökning av ej funnet gods (Minuter)"
-              name="wait_time_loader"
+              name="search_load"
               variant="outlined"
               className={classes.input}
               onChange={(e) => {
@@ -239,7 +240,7 @@ const Form = () => {
             <TextField
               type="number"
               label="Vänta på port OMEX Exportgatan (Minuter)"
-              name="search_load"
+              name="waitTimeOmex"
               variant="outlined"
               className={classes.input}
               onChange={(e) => {
@@ -249,7 +250,7 @@ const Form = () => {
             <TextField
               type="number"
               label="Medtaget gods (Antal)"
-              name="wait_time_empty_load"
+              name="includingGods"
               variant="outlined"
               className={classes.input}
               onChange={(e) => {
@@ -260,7 +261,7 @@ const Form = () => {
             <TextField
               type="number"
               label="Lass ej färdigtplockat (Minuter)"
-              name="minut"
+              name="godsNotReady"
               variant="outlined"
               className={classes.input}
               onChange={(e) => {
