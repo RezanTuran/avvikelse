@@ -12,6 +12,7 @@ import Axios from 'axios';
 import Rapports from '../rapports/rapports';
 import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
+import Swal from 'sweetalert2';
 
 const Form = () => {
   const isMobile = useMediaQuery('(min-width:767px)');
@@ -100,10 +101,49 @@ const Form = () => {
       .catch((err) => console.log(err));
   };
 
-  function sendEmail(e: any) {
+  const sendEmail = (e: any) => {
+    e.preventDefault();
     if (firstName === '') {
-      e.preventDefault();
-      alert('Ange ditt förnamn');
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv ditt förnamn',
+      });
+      return false;
+    } else if (sureName === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv ditt efternamn',
+      });
+      return false;
+    } else if (loadNumber === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv lass nummret',
+      });
+      return false;
+    } else if (date === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv datumet',
+      });
+      return false;
+    } else if (driverNumber === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv chaufförs nummret',
+      });
+      return false;
+    } else if (phoneNumber === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv ditt telefonnummer',
+      });
       return false;
     } else {
       sendRapport(e);
@@ -124,7 +164,7 @@ const Form = () => {
         );
       e.target.reset();
     }
-  }
+  };
 
   return (
     <Grid>
@@ -135,6 +175,9 @@ const Form = () => {
         <Grid className={classes.wrapper}>
           <Typography variant="h5" align="center" color="primary">
             ICA AVVIKELSERAPPORT KUNGÄLV
+          </Typography>
+          <Typography variant="h6" color="secondary">
+            Fyll i stjärnmarkerade fält
           </Typography>
           <Grid
             className={classes.container}
@@ -156,7 +199,7 @@ const Form = () => {
               type="date"
               name="date"
               variant="outlined"
-              label={isMobile ? '' : 'Datum'}
+              label={isMobile ? '' : 'Datum *'}
               className={classes.input}
               onChange={(e) => {
                 setDate(e.target.value);
