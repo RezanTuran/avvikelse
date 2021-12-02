@@ -9,11 +9,13 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@material-ui/core';
+import SendIcon from '@mui/icons-material/Send';
 import useStyles from './styles';
 import Axios from 'axios';
 import Rapports from '../rapports/rapports';
 import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
+import Swal from 'sweetalert2';
 
 const Form = () => {
   const isMobile = useMediaQuery('(min-width:767px)');
@@ -36,6 +38,31 @@ const Form = () => {
   const [includedLoad, setIncludedLoad] = useState(String);
   const [loadNotRady, setLoadNotRady] = useState(String);
   const [otherInfo, setOtherInfo] = useState(String);
+
+  if (waitTimeGuard === '') {
+    setWaitTimeGuard('0');
+  }
+  if (waitTimePort === '') {
+    setWaitTimePort('0');
+  }
+  if (waitTimeUnloader === '') {
+    setWaitTimeUnloader('0');
+  }
+  if (waitTimeSearchGoods === '') {
+    setWaitTimeSearchGoods('0');
+  }
+  if (waitTimeOmexPort === '') {
+    setWaitTimeOmexPort('0');
+  }
+  if (includedLoad === '') {
+    setIncludedLoad('0');
+  }
+  if (loadNotRady === '') {
+    setLoadNotRady('0');
+  }
+  if (otherInfo === '') {
+    setOtherInfo(' ');
+  }
 
   const sendRapport = (e: any) => {
     e.preventDefault();
@@ -65,7 +92,7 @@ const Form = () => {
     formData.append('loadnotrady', loadNotRady);
     formData.append('otherinfo', otherInfo);
 
-    const url = 'http://localhost:80/insert.php/';
+    const url = process.env.REACT_APP_POST || '';
     Axios.post(url, formData)
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
@@ -73,23 +100,74 @@ const Form = () => {
 
   const sendEmail = (e: any) => {
     e.preventDefault();
-    sendRapport(e);
-    emailjs
-      .sendForm(
-        'service_b33p05r',
-        'template_556aefp',
-        e.target,
-        'user_NqjwPyD6lDtwweTdX8Bmu'
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
-    e.target.reset();
+    if (firstName === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv ditt förnamn',
+      });
+      return false;
+    } else if (sureName === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv ditt efternamn',
+      });
+      return false;
+    } else if (loadNumber === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv lass nummret',
+      });
+      return false;
+    } else if (date === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv datumet',
+      });
+      return false;
+    } else if (driverNumber === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv chaufförs nummret',
+      });
+      return false;
+    } else if (phoneNumber === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen skriv ditt telefonnummer',
+      });
+      return false;
+    } else if (!pickup && !distribution) {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen välj körningtyp',
+      });
+      return false;
+    } else {
+      sendRapport(e);
+      emailjs
+        .sendForm(
+          process.env.REACT_APP_EMAIL_SERVICE_ID || '',
+          process.env.REACT_APP_HGB_EMAIL_TEMPLATE_ID || '',
+          e.target,
+          process.env.REACT_APP_EMAIL_USER_ID || ''
+        )
+        .then(
+          (result) => {
+            console.log(result.text);
+          },
+          (error) => {
+            console.log(error.text);
+          }
+        );
+      e.target.reset();
+    }
   };
 
   return (
@@ -101,7 +179,10 @@ const Form = () => {
       <form onSubmit={sendEmail}>
         <Grid className={classes.wrapper}>
           <Typography variant="h5" align="center" color="primary">
-            ICA AVVIKELSERAPPORT HELSINGBORG
+            ICA AVVIKELSERAPPORT HELSINGBORG FRYS
+          </Typography>
+          <Typography variant="h6" color="secondary">
+            Fyll i stjärnmarkerade fält
           </Typography>
           <Grid
             className={classes.container}
@@ -112,7 +193,7 @@ const Form = () => {
             <TextField
               type="number"
               name="lass_number"
-              label="LASS Nummer"
+              label="LASS Nummer *"
               variant="outlined"
               className={classes.input}
               onChange={(e) => {
@@ -131,7 +212,7 @@ const Form = () => {
             />
             <TextField
               type="text"
-              label="Namn Chaufför"
+              label="Namn Chaufför *"
               name="driver_name"
               variant="outlined"
               className={classes.input}
@@ -141,7 +222,7 @@ const Form = () => {
             />
             <TextField
               type="text"
-              label="Efternamn Chaufför"
+              label="Efternamn Chaufför *"
               name="driver_surename"
               variant="outlined"
               className={classes.input}
@@ -151,7 +232,7 @@ const Form = () => {
             />
             <TextField
               type="number"
-              label="Chaufförs nummer"
+              label="Chaufförs nummer *"
               name="driver_number"
               variant="outlined"
               className={classes.input}
@@ -161,7 +242,7 @@ const Form = () => {
             />
             <TextField
               type="number"
-              label="Mobilnummer"
+              label="Mobilnummer *"
               name="phone_number"
               variant="outlined"
               className={classes.input}
@@ -173,6 +254,8 @@ const Form = () => {
               <FormControlLabel
                 control={
                   <Checkbox
+                    value="Hämtning Helsingborg"
+                    name="pickUp"
                     onChange={(e) => {
                       setPickup(e.target.checked);
                     }}
@@ -184,6 +267,8 @@ const Form = () => {
               <FormControlLabel
                 control={
                   <Checkbox
+                    value="Ditrubition"
+                    name="distribution"
                     onChange={(e) => {
                       setDistribution(e.target.checked);
                     }}
@@ -288,6 +373,7 @@ const Form = () => {
               variant="contained"
               color="primary"
               type="submit"
+              endIcon={<SendIcon />}
               className={classes.input}
             >
               Skicka
