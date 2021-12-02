@@ -7,6 +7,7 @@ import {
   useMediaQuery,
   TextareaAutosize,
 } from '@material-ui/core';
+import SendIcon from '@mui/icons-material/Send';
 import useStyles from './styles';
 import Axios from 'axios';
 import Rapports from '../rapports/rapports';
@@ -95,7 +96,7 @@ const Form = () => {
     formData.append('quantity', quantity);
     formData.append('otherinfo', otherInfo);
 
-    const url = 'http://localhost:80/insert.php/';
+    const url = process.env.REACT_APP_POST || '';
     Axios.post(url, formData)
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
@@ -149,10 +150,10 @@ const Form = () => {
       sendRapport(e);
       emailjs
         .sendForm(
-          'service_b33p05r',
-          'template_m1ypj2a',
+          process.env.REACT_APP_EMAIL_SERVICE_ID || '',
+          process.env.REACT_APP_EMAIL_TEMPLATE_ID || '',
           e.target,
-          'user_NqjwPyD6lDtwweTdX8Bmu'
+          process.env.REACT_APP_EMAIL_USER_ID || ''
         )
         .then(
           (result) => {
@@ -373,6 +374,7 @@ const Form = () => {
               variant="contained"
               color="primary"
               type="submit"
+              endIcon={<SendIcon />}
               className={classes.input}
             >
               Skicka
