@@ -4,6 +4,8 @@ import useStyles from './styles';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/Logo.png';
 import { Helmet } from 'react-helmet';
+import LoginIcon from '@mui/icons-material/Login';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const Home = () => {
   const isMobile = useMediaQuery('(min-width:991px)');
@@ -18,21 +20,37 @@ const Home = () => {
         <img src={Logo} alt="logo" width={isMobile ? '' : '300px'} />
       </Grid>
       <Divider variant="middle" />
-      <Grid className={classes.container}>
-        <Grid className={classes.buttonBox}>
-          <Button variant="contained" className={classes.button}>
-            <Link className={classes.link} to="/kungalvform">
-              ICA AVVIKELSERAPPORT KUNGÄLV
-            </Link>
+
+      <Grid className={isMobile ? classes.containerDesktop : classes.container}>
+        <Link className={classes.link} to="/kungalvform">
+          <Button
+            variant="contained"
+            startIcon={<LoginIcon />}
+            className={isMobile ? classes.buttonDekstop : classes.button}
+          >
+            Logga in
           </Button>
-        </Grid>
-        <Grid className={classes.buttonBox}>
-          <Button variant="contained" className={classes.button}>
-            <Link className={classes.link} to="/helsingborgform">
-              ICA AVVIKELSERAPPORT Helsingborg
-            </Link>
+        </Link>
+
+        <Link className={classes.link} to="/kungalvform">
+          <Button
+            variant="contained"
+            startIcon={<AssignmentIcon />}
+            className={isMobile ? classes.buttonDekstop : classes.button}
+          >
+            ICA AVVIKELSERAPPORT KUNGÄLV
           </Button>
-        </Grid>
+        </Link>
+
+        <Link className={classes.link} to="/helsingborgform">
+          <Button
+            variant="contained"
+            startIcon={<AssignmentIcon />}
+            className={isMobile ? classes.buttonDekstop : classes.button}
+          >
+            ICA AVVIKELSERAPPORT Helsingborg
+          </Button>
+        </Link>
       </Grid>
     </Grid>
   );
