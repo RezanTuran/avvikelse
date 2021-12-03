@@ -15,7 +15,7 @@ import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
 
-const Form = () => {
+const KungalvForm = () => {
   const isMobile = useMediaQuery('(min-width:767px)');
   const classes = useStyles();
 
@@ -387,4 +387,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default KungalvForm;
