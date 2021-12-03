@@ -1,54 +1,27 @@
-import React from 'react';
-
-// interface User {
-//   city: string;
-//   date: string;
-//   driverNumber: number;
-//   firstName: string;
-//   id: number;
-//   loadNumber: number;
-//   mileage: number;
-//   otherInfo: string;
-//   phoneNumber: number;
-//   quantity: string;
-//   requireTime: number;
-//   storeName: string;
-//   sureName: string;
-//   time: string;
-//   waitTimeEmptyGoods: number;
-//   waitTimeGuard: number;
-//   waitTimePort: number;
-//   waitTimeSearchGoods: number;
-//   waitTimeUnloader: number;
-// }
-
-const makeRequest = (url: any, method: any, formdata: any, callback: any) => {
-  fetch(url, {
-    method: method,
-    body: formdata,
-  })
-    .then((data) => {
-      return data.json();
-    })
-    .then((result) => {
-      callback(result);
-    })
-    .catch((err) => {
-      console.log('Error: ', err);
-    });
-};
-
-const getRepports = () => {
-  makeRequest('http://localhost:80/get.php/', 'GET', null, (result: any) => {
-    for (let i = 0; i < result.length; i++) {
-      console.log(result[i]);
-    }
-  });
-};
-getRepports();
+import React, { useState, useEffect } from 'react';
+import Axios from 'axios';
 
 const Rapports = () => {
-  return <div></div>;
+  const [rapports, setRapports] = useState([]);
+
+  useEffect(() => {
+    Axios.get(process.env.REACT_APP_GET || '')
+      .then((Response: any) => {
+        setRapports(Response.data);
+        console.log(Response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  return (
+    <div>
+      {rapports.map((rapport: any) => (
+        <li key={rapport.id}>{rapport.firstName}</li>
+      ))}
+    </div>
+  );
 };
 
 export default Rapports;
