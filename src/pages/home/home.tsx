@@ -22,7 +22,7 @@ const Home = () => {
       <Divider variant="middle" />
 
       <Grid className={isMobile ? classes.containerDesktop : classes.container}>
-        <Link className={classes.link} to="/kungalvform">
+        <Link className={classes.link} to="/login">
           <Button
             variant="contained"
             startIcon={<LoginIcon />}
