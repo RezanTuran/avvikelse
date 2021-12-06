@@ -12,7 +12,6 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import useStyles from './styles';
 import Axios from 'axios';
-import Rapports from '../rapports/rapports';
 import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
@@ -93,9 +92,9 @@ const HelsingborgForm = () => {
     formData.append('otherinfo', otherInfo);
 
     const url = process.env.REACT_APP_POST || '';
-    Axios.post(url, formData)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+    Axios.post(url, formData);
+    // .then((res) => console.log(res.data))
+    // .catch((err) => console.log(err));
   };
 
   const sendEmail = (e: any) => {
@@ -160,10 +159,21 @@ const HelsingborgForm = () => {
         )
         .then(
           (result) => {
-            console.log(result.text);
+            //console.log(result.text);
+            if (result.status === 200) {
+              Swal.fire({
+                icon: 'success',
+                text: 'Avvikelse rapporten har skickats',
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                text: 'Det gick inte skicka avvikelse rapporten vänligen försök igen',
+              });
+            }
           },
           (error) => {
-            console.log(error.text);
+            //console.log(error.text);
           }
         );
       e.target.reset();
@@ -379,7 +389,6 @@ const HelsingborgForm = () => {
               Skicka
             </Button>
           </Grid>
-          <Rapports />
         </Grid>
       </form>
     </Grid>
