@@ -18,7 +18,13 @@ const Rapports = () => {
   return (
     <div>
       {rapports.map((rapport: any) => (
-        <li key={rapport.id}>{rapport.firstName}</li>
+        <div key={rapport.id}>
+          <h4>{rapport.firstName}</h4>
+          <h4>{rapport.sureName}</h4>
+          <h4>{rapport.phoneNumber}</h4>
+          <h4>{rapport.driverNumber}</h4>
+          <h4>{rapport.loadNumber}</h4>
+        </div>
       ))}
     </div>
   );
