@@ -9,11 +9,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LoginIcon from '@mui/icons-material/Login';
+import Alert from '@mui/material/Alert';
+import { Helmet } from 'react-helmet';
 
 const LoginForm = ({ Login, error }: any) => {
   const theme = createTheme();
 
-  const [details, setDetails] = useState({ name: '', email: '', password: '' });
+  const [details, setDetails] = useState({ email: '', password: '' });
 
   const submitHandler = (e: any) => {
     e.preventDefault();
@@ -23,6 +25,9 @@ const LoginForm = ({ Login, error }: any) => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>Logga in</title>
+      </Helmet>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -40,19 +45,19 @@ const LoginForm = ({ Login, error }: any) => {
             Logga in
           </Typography>
           <Box onSubmit={submitHandler} component="form" sx={{ mt: 1 }}>
-            <h1>{error}</h1>
+            {error ? <Alert severity="error">{error}</Alert> : ''}
             <TextField
               margin="normal"
               required
               fullWidth
               label="Användarnamn"
-              autoComplete=""
               autoFocus
               onChange={(e) =>
                 setDetails({ ...details, email: e.target.value })
               }
               value={details.email}
             />
+
             <TextField
               margin="normal"
               required

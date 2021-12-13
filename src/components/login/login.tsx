@@ -2,41 +2,37 @@ import React, { useState } from 'react';
 import Loginform from './loginForm';
 import Rapports from '../rapports';
 
-const SignIn = () => {
+const Login = () => {
   const adminUser = {
     email: process.env.REACT_APP_USERNAME,
     password: process.env.REACT_APP_PASSWORD,
   };
 
-  const [user, setUser] = useState({ name: '', email: '' });
+  const [user, setUser] = useState({ email: '' });
   const [error, setError] = useState('');
 
   const Login = (details: any) => {
-    console.log(details);
-
     if (
       details.email === adminUser.email &&
       details.password === adminUser.password
     ) {
-      console.log('logged in');
       setUser({
-        name: details.name,
         email: details.email,
       });
     } else {
-      setError('Uppgifter stämmer inte');
+      setError('Fel användarnamn eller lösenord');
     }
   };
 
   const Logout = () => {
-    setUser({ name: '', email: '' });
+    setUser({ email: '' });
   };
 
   return (
     <div>
       {user.email !== '' ? (
         <div>
-          <h2>{user.name}</h2>
+          <h2>{user.email}</h2>
           <Rapports />
           <button onClick={Logout}>Logout</button>
         </div>
@@ -46,4 +42,4 @@ const SignIn = () => {
     </div>
   );
 };
-export default SignIn;
+export default Login;
