@@ -23,20 +23,21 @@ $otherinfo = $_POST['otherinfo'];
 $waittimeomexport = $_POST['waittimeomexport'];
 $includedload = $_POST['includedload'];
 $loadnotrady = $_POST['loadnotrady'];
+$signature = $_POST['signature'];
 
-$query = "INSERT INTO avvikelseKungalv 
-(firstName,sureName,phoneNumber,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeEmptyGoods,requireTime,mileage,storeName,city,quantity,otherInfo) 
-VALUES('$firstname','$surename','$phonenumber','$drivernumber','$loadnumber','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeemptygoods','$requireTime','$mileage','$storeName','$city','$quantity','$otherinfo')";
+$queryKung = "INSERT INTO avvikelseKungalv 
+(firstName,sureName,phoneNumber,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeEmptyGoods,requireTime,mileage,storeName,city,quantity,otherInfo,signature) 
+VALUES('$firstname','$surename','$phonenumber','$drivernumber','$loadnumber','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeemptygoods','$requireTime','$mileage','$storeName','$city','$quantity','$otherinfo','$signature')";
 
-$sql = "INSERT INTO avvikelseHelsingborg 
-(firstName,sureName,phoneNumber,drivingType,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeOmexPort,includedLoad,loadNotRady,otherInfo) 
-VALUES('$firstname','$surename','$phonenumber','$drivingType','$drivernumber','$loadnumber','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeomexport','$includedload','$loadnotrady','$otherinfo')";
+$queryHGB = "INSERT INTO avvikelseHelsingborg 
+(firstName,sureName,phoneNumber,drivingType,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeOmexPort,includedLoad,loadNotRady,otherInfo,signature) 
+VALUES('$firstname','$surename','$phonenumber','$drivingType','$drivernumber','$loadnumber','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeomexport','$includedload','$loadnotrady','$otherinfo','$$signature')";
 
-if(mysqli_query($conn, $query)){
-    echo "Data has been inserted successfully";
+if(mysqli_query($conn, $queryKung)){
+    echo "Data has been inserted successfully Kung";
 }
-else if(mysqli_query($conn, $sql)){
-    echo "Data has been inserted successfully SQLLL";
+else if(mysqli_query($conn, $queryHGB)){
+    echo "Data has been inserted successfully HGB";
 }
 else{
     echo "Error";

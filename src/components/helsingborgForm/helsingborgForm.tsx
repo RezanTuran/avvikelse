@@ -8,6 +8,7 @@ import {
   TextareaAutosize,
   Checkbox,
   FormControlLabel,
+  Box,
 } from '@material-ui/core';
 import SendIcon from '@mui/icons-material/Send';
 import useStyles from './styles';
@@ -15,8 +16,13 @@ import Axios from 'axios';
 import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
+import SignatureCanvas from 'react-signature-canvas';
+
+let signatureData: any[] = [];
+let data = '';
 
 const HelsingborgForm = () => {
+  const signCanvas = React.useRef() as React.MutableRefObject<any>;
   const isMobile = useMediaQuery('(min-width:767px)');
   const classes = useStyles();
 
@@ -37,6 +43,7 @@ const HelsingborgForm = () => {
   const [includedLoad, setIncludedLoad] = useState(String);
   const [loadNotRady, setLoadNotRady] = useState(String);
   const [otherInfo, setOtherInfo] = useState(String);
+  const [signature, setSignature] = useState([]);
 
   if (waitTimeGuard === '') {
     setWaitTimeGuard('0');
@@ -62,6 +69,32 @@ const HelsingborgForm = () => {
   if (otherInfo === '') {
     setOtherInfo(' ');
   }
+
+  const saveSignature = () => {
+    if (signCanvas.current.isEmpty()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänlingen signera i rutan',
+      });
+      return false;
+    } else {
+      setSignature([...signature]);
+      signatureData.push(
+        signCanvas.current.getTrimmedCanvas().toDataURL('image/png')
+      );
+      Swal.fire({
+        icon: 'success',
+        text: 'Din signatur är godkänd',
+      });
+    }
+  };
+
+  const clearSignature = () => {
+    setSignature([...signature]);
+    signatureData.pop();
+    signCanvas.current.clear();
+  };
 
   const sendRapport = (e: any) => {
     e.preventDefault();
@@ -90,6 +123,9 @@ const HelsingborgForm = () => {
     formData.append('includedload', includedLoad);
     formData.append('loadnotrady', loadNotRady);
     formData.append('otherinfo', otherInfo);
+
+    data = signCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+    formData.append('signature', data);
 
     const url = process.env.REACT_APP_POST || '';
     Axios.post(url, formData);
@@ -148,8 +184,23 @@ const HelsingborgForm = () => {
         text: 'Vänligen välj körningtyp',
       });
       return false;
+    } else if (signCanvas.current.isEmpty() === true) {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen signera',
+      });
+      return false;
+    } else if (signatureData.length < 1) {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen signera genom att klcika på signera buttonen',
+      });
+      return false;
     } else {
       sendRapport(e);
+      clearSignature();
       emailjs
         .sendForm(
           process.env.REACT_APP_EMAIL_SERVICE_ID || '',
@@ -186,7 +237,7 @@ const HelsingborgForm = () => {
         <title>ICA Helsingborg Frys</title>
       </Helmet>
 
-      <form onSubmit={sendEmail}>
+      <Box onSubmit={sendEmail} component="form">
         <Grid className={classes.wrapper}>
           <Typography variant="h5" align="center" color="primary">
             ICA AVVIKELSERAPPORT HELSINGBORG FRYS
@@ -379,6 +430,48 @@ const HelsingborgForm = () => {
                 setOtherInfo(e.target.value);
               }}
             />
+            <Typography variant="h6" align="center" color="primary">
+              Underskrift Chaufför
+            </Typography>
+            <Typography variant="body1" align="center" color="secondary">
+              OBS! Glöm inte signera innan du skickar rapporten
+            </Typography>
+            <Grid className={classes.signatureContainer}>
+              <Grid className={classes.signature}>
+                <SignatureCanvas
+                  ref={signCanvas}
+                  penColor="black"
+                  canvasProps={{
+                    width: isMobile ? 700 : 350,
+                    height: 200,
+                  }}
+                />
+              </Grid>
+              <Grid className={classes.signatureButtonsBox}>
+                <Button
+                  onClick={saveSignature}
+                  type="button"
+                  variant="contained"
+                  className={classes.signatureAreaButtons}
+                >
+                  Signera
+                </Button>
+                <Button
+                  onClick={clearSignature}
+                  type="button"
+                  variant="contained"
+                  className={classes.signatureAreaButtons}
+                >
+                  Rensa
+                </Button>
+              </Grid>
+            </Grid>
+            <TextField
+              type="text"
+              name="signature"
+              value={signatureData}
+              className={classes.hiddenInput}
+            />
             <Button
               variant="contained"
               color="primary"
@@ -390,7 +483,7 @@ const HelsingborgForm = () => {
             </Button>
           </Grid>
         </Grid>
-      </form>
+      </Box>
     </Grid>
   );
 };

@@ -6,6 +6,7 @@ import {
   Typography,
   useMediaQuery,
   TextareaAutosize,
+  Box,
 } from '@material-ui/core';
 import SendIcon from '@mui/icons-material/Send';
 import useStyles from './styles';
@@ -13,8 +14,13 @@ import Axios from 'axios';
 import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
+import SignatureCanvas from 'react-signature-canvas';
+
+let signatureData: any[] = [];
+let data = '';
 
 const KungalvForm = () => {
+  const signCanvas = React.useRef() as React.MutableRefObject<any>;
   const isMobile = useMediaQuery('(min-width:767px)');
   const classes = useStyles();
 
@@ -36,6 +42,7 @@ const KungalvForm = () => {
   const [city, setCity] = useState(String);
   const [quantity, setQuantity] = useState(String);
   const [otherInfo, setOtherInfo] = useState(String);
+  const [signature, setSignature] = useState([]);
 
   if (waitTimeGuard === '') {
     setWaitTimeGuard('0');
@@ -71,6 +78,32 @@ const KungalvForm = () => {
     setOtherInfo(' ');
   }
 
+  const saveSignature = () => {
+    if (signCanvas.current.isEmpty()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänlingen signera i rutan',
+      });
+      return false;
+    } else {
+      setSignature([...signature]);
+      signatureData.push(
+        signCanvas.current.getTrimmedCanvas().toDataURL('image/png')
+      );
+      Swal.fire({
+        icon: 'success',
+        text: 'Din signatur är godkänd',
+      });
+    }
+  };
+
+  const clearSignature = () => {
+    setSignature([...signature]);
+    signatureData.pop();
+    signCanvas.current.clear();
+  };
+
   const sendRapport = (e: any) => {
     e.preventDefault();
 
@@ -94,6 +127,9 @@ const KungalvForm = () => {
     formData.append('city', city);
     formData.append('quantity', quantity);
     formData.append('otherinfo', otherInfo);
+
+    data = signCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+    formData.append('signature', data);
 
     const url = process.env.REACT_APP_POST || '';
     Axios.post(url, formData);
@@ -145,8 +181,23 @@ const KungalvForm = () => {
         text: 'Vänligen skriv ditt telefonnummer',
       });
       return false;
+    } else if (signCanvas.current.isEmpty() === true) {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen signera',
+      });
+      return false;
+    } else if (signatureData.length < 1) {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen signera genom att klcika på signera buttonen',
+      });
+      return false;
     } else {
       sendRapport(e);
+      clearSignature();
       emailjs
         .sendForm(
           process.env.REACT_APP_EMAIL_SERVICE_ID || '',
@@ -182,7 +233,7 @@ const KungalvForm = () => {
       <Helmet>
         <title>ICA Kungälv</title>
       </Helmet>
-      <form onSubmit={sendEmail}>
+      <Box onSubmit={sendEmail} component="form">
         <Grid className={classes.wrapper}>
           <Typography variant="h5" align="center" color="primary">
             ICA AVVIKELSERAPPORT KUNGÄLV
@@ -380,6 +431,48 @@ const KungalvForm = () => {
                 setOtherInfo(e.target.value);
               }}
             />
+            <Typography variant="h6" align="center" color="primary">
+              Underskrift Chaufför
+            </Typography>
+            <Typography variant="body1" align="center" color="secondary">
+              OBS! Glöm inte signera innan du skickar rapporten
+            </Typography>
+            <Grid className={classes.signatureContainer}>
+              <Grid className={classes.signature}>
+                <SignatureCanvas
+                  ref={signCanvas}
+                  penColor="black"
+                  canvasProps={{
+                    width: isMobile ? 700 : 350,
+                    height: 200,
+                  }}
+                />
+              </Grid>
+              <Grid className={classes.signatureButtonsBox}>
+                <Button
+                  onClick={saveSignature}
+                  type="button"
+                  variant="contained"
+                  className={classes.signatureAreaButtons}
+                >
+                  Signera
+                </Button>
+                <Button
+                  onClick={clearSignature}
+                  type="button"
+                  variant="contained"
+                  className={classes.signatureAreaButtons}
+                >
+                  Rensa
+                </Button>
+              </Grid>
+            </Grid>
+            <TextField
+              type="text"
+              name="signature"
+              value={signatureData}
+              className={classes.hiddenInput}
+            />
             <Button
               variant="contained"
               color="primary"
@@ -391,7 +484,7 @@ const KungalvForm = () => {
             </Button>
           </Grid>
         </Grid>
-      </form>
+      </Box>
     </Grid>
   );
 };
