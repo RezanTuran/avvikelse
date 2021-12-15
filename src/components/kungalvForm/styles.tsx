@@ -35,4 +35,7 @@ export default makeStyles(() => ({
   hiddenInput: {
     display: 'none',
   },
+  inputBox: {
+    display: 'flex',
+  },
 }));
