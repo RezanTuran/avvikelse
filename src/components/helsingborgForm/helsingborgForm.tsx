@@ -216,15 +216,16 @@ const HelsingborgForm = () => {
                 icon: 'success',
                 text: 'Avvikelse rapporten har skickats',
               });
-            } else {
+            }
+          },
+          (error) => {
+            //console.log(error.text);
+            if (error) {
               Swal.fire({
                 icon: 'error',
                 text: 'Det gick inte skicka avvikelse rapporten vänligen försök igen',
               });
             }
-          },
-          (error) => {
-            //console.log(error.text);
           }
         );
       e.target.reset();
