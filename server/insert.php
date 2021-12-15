@@ -7,6 +7,7 @@ $phonenumber = $_POST['phonenumber'];
 $drivingType = $_POST['drivingtype'];
 $drivernumber = $_POST['drivernumber'];
 $loadnumber = $_POST['loadnumber'];
+$deliveryarea = $_POST['deliveryarea'];
 $date = $_POST['date'];
 $time = $_POST['time'];
 $waittimeguard = $_POST['waittimeguard'];
@@ -17,6 +18,7 @@ $waittimeemptygoods = $_POST['waittimeemptygoods'];
 $requireTime = $_POST['requiretime'];
 $mileage = $_POST['mileage'];
 $storeName = $_POST['storename'];
+$storeNumber = $_POST['storenumber'];
 $city = $_POST['city'];
 $quantity = $_POST['quantity'];
 $otherinfo = $_POST['otherinfo'];
@@ -26,8 +28,8 @@ $loadnotrady = $_POST['loadnotrady'];
 $signature = $_POST['signature'];
 
 $queryKung = "INSERT INTO avvikelseKungalv 
-(firstName,sureName,phoneNumber,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeEmptyGoods,requireTime,mileage,storeName,city,quantity,otherInfo,signature) 
-VALUES('$firstname','$surename','$phonenumber','$drivernumber','$loadnumber','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeemptygoods','$requireTime','$mileage','$storeName','$city','$quantity','$otherinfo','$signature')";
+(firstName,sureName,phoneNumber,driverNumber,loadNumber,deliveryArea,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeEmptyGoods,requireTime,mileage,storeName,storeNumber,city,quantity,otherInfo,signature) 
+VALUES('$firstname','$surename','$phonenumber','$drivernumber','$loadnumber','$deliveryarea','$date','$time','$waittimeguard','$waittimeport','$waittimeunloader','$waittimesearchgoods','$waittimeemptygoods','$requireTime','$mileage','$storeName','$storeNumber','$city','$quantity','$otherinfo','$signature')";
 
 $queryHGB = "INSERT INTO avvikelseHelsingborg 
 (firstName,sureName,phoneNumber,drivingType,driverNumber,loadNumber,date,time,waitTimeGuard,waitTimePort,waitTimeUnloader,waitTimeSearchGoods,waitTimeOmexPort,includedLoad,loadNotRady,otherInfo,signature) 

@@ -15,6 +15,10 @@ import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
 import SignatureCanvas from 'react-signature-canvas';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 let signatureData: any[] = [];
 let data = '';
@@ -39,10 +43,16 @@ const KungalvForm = () => {
   const [requireTime, setRequireTime] = useState(String);
   const [mileage, setMileage] = useState(String);
   const [storeName, setStoreName] = useState(String);
+  const [storeNumber, setStoreNumber] = useState(String);
   const [city, setCity] = useState(String);
   const [quantity, setQuantity] = useState(String);
   const [otherInfo, setOtherInfo] = useState(String);
   const [signature, setSignature] = useState([]);
+  const [deliveryArea, setDeliveryArea] = React.useState(String);
+
+  const handleChange = (e: SelectChangeEvent) => {
+    setDeliveryArea(e.target.value);
+  };
 
   if (waitTimeGuard === '') {
     setWaitTimeGuard('0');
@@ -67,6 +77,9 @@ const KungalvForm = () => {
   }
   if (storeName === '') {
     setStoreName(' ');
+  }
+  if (storeNumber === '') {
+    setStoreNumber('0');
   }
   if (city === '') {
     setCity(' ');
@@ -114,6 +127,7 @@ const KungalvForm = () => {
     formData.append('phonenumber', phoneNumber);
     formData.append('drivernumber', driverNumber);
     formData.append('loadnumber', loadNumber);
+    formData.append('deliveryarea', deliveryArea);
     formData.append('date', date);
     formData.append('time', time);
     formData.append('waittimeguard', waitTimeGuard);
@@ -124,6 +138,7 @@ const KungalvForm = () => {
     formData.append('requiretime', requireTime);
     formData.append('mileage', mileage);
     formData.append('storename', storeName);
+    formData.append('storenumber', storeNumber);
     formData.append('city', city);
     formData.append('quantity', quantity);
     formData.append('otherinfo', otherInfo);
@@ -158,6 +173,13 @@ const KungalvForm = () => {
         icon: 'error',
         title: 'OBS!',
         text: 'Vänligen skriv lass nummret',
+      });
+      return false;
+    } else if (deliveryArea === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'OBS!',
+        text: 'Vänligen ange utleveransområde',
       });
       return false;
     } else if (date === '') {
@@ -213,15 +235,16 @@ const KungalvForm = () => {
                 icon: 'success',
                 text: 'Avvikelse rapporten har skickats',
               });
-            } else {
+            }
+          },
+          (error) => {
+            //console.log(error.text);
+            if (error) {
               Swal.fire({
                 icon: 'error',
                 text: 'Det gick inte skicka avvikelse rapporten vänligen försök igen',
               });
             }
-          },
-          (error) => {
-            //console.log(error.text);
           }
         );
       e.target.reset();
@@ -247,16 +270,42 @@ const KungalvForm = () => {
               width: isMobile ? '50%' : '100%',
             }}
           >
-            <TextField
-              type="number"
-              name="lass_number"
-              label="LASS Nummer *"
-              variant="outlined"
-              className={classes.input}
-              onChange={(e) => {
-                setLoadNumber(e.target.value);
-              }}
-            />
+            <Grid className={classes.inputBox}>
+              <Box sx={{ minWidth: 220 }}>
+                <FormControl fullWidth>
+                  <InputLabel
+                    className={classes.input}
+                    id="demo-simple-select-label"
+                  >
+                    Utleveransområde *
+                  </InputLabel>
+                  <Select
+                    className={classes.input}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={deliveryArea}
+                    label="Utleveransområde *"
+                    onChange={handleChange}
+                    name="delivery_area"
+                  >
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              <TextField
+                fullWidth
+                type="number"
+                name="lass_number"
+                label="LASS Nummer *"
+                variant="outlined"
+                className={classes.input}
+                onChange={(e) => {
+                  setLoadNumber(e.target.value);
+                }}
+              />
+            </Grid>
+
             <TextField
               type="date"
               name="date"
@@ -386,16 +435,31 @@ const KungalvForm = () => {
                 setMileage(e.target.value);
               }}
             />
-            <TextField
-              type="text"
-              label="Butiksnamn"
-              name="store_name"
-              variant="outlined"
-              className={classes.input}
-              onChange={(e) => {
-                setStoreName(e.target.value);
-              }}
-            />
+            <Grid className={classes.inputBox}>
+              <TextField
+                fullWidth
+                type="text"
+                label="Butiksnamn"
+                name="store_name"
+                variant="outlined"
+                className={classes.input}
+                onChange={(e) => {
+                  setStoreName(e.target.value);
+                }}
+              />
+
+              <TextField
+                fullWidth
+                type="number"
+                label="Butiksnummer"
+                name="store_number"
+                variant="outlined"
+                className={classes.input}
+                onChange={(e) => {
+                  setStoreNumber(e.target.value);
+                }}
+              />
+            </Grid>
             <TextField
               type="text"
               label="Stad"
