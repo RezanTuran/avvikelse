@@ -5,7 +5,7 @@ import Vehicle from './vehicle';
 const TruckRepair = () => {
   const [truckReapairArea, setTruckReapairArea] = useState(String);
   const [explainRepair, setExplain] = useState(String);
-  const [truckImg, setTruckImg] = useState(String);
+  const [truckImg, setTruckImg] = useState(new Blob());
   const [regNr, setRegNr] = useState(String);
 
   const sendRapport = (e: any) => {
@@ -26,6 +26,10 @@ const TruckRepair = () => {
     Axios.post(url, formData)
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
+  };
+
+  const removeSelectedImage = () => {
+    setTruckImg(new Blob());
   };
 
   return (
@@ -78,6 +82,8 @@ const TruckRepair = () => {
             setTruckImg(e.target.files[0]);
           }}
         />
+        <img src={URL.createObjectURL(truckImg)} alt="" />
+        <button onClick={removeSelectedImage}>Ta bort bilden</button>
 
         <input type="submit" value="Skicka" />
       </form>
