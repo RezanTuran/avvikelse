@@ -5,7 +5,7 @@
             return  NULL;
         }
 
-        $target_dir = "../images/";
+        $target_dir = "../../src/assets/img/";
         $target_file = $target_dir . basename($image["name"]);
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 

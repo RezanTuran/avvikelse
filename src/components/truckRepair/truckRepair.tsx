@@ -75,7 +75,7 @@ const TruckRepair = () => {
           type="file"
           name="truckImg"
           onChange={(e: any) => {
-            setTruckImg(e.target.files[0].name);
+            setTruckImg(e.target.files[0]);
           }}
         />
 
