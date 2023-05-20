@@ -1,8 +1,7 @@
 <?php 
-
-function add($regNr,$repairArea,$explainRepair ,$image ,$datum) {
+include_once("../classes/database.php");
+function reportTruckRepair($regNr,$repairArea,$explainRepair ,$image ,$datum) {
     include_once("./../handlers/imageHandler.php");
-    include_once("../classes/database.php");
     $imageUrl = uploadImage($image);
 
     $database = new Database();
@@ -22,5 +21,18 @@ function add($regNr,$repairArea,$explainRepair ,$image ,$datum) {
     return $status;
 }
 
+//### Get truck repairs ### //
+function getTruckRepairs() {
+    $database = new Database();
+    $query = $database->connection->prepare("SELECT * FROM truckRepait");
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    if (empty($result)){
+        throw new Exception("No product found", 404);
+        exit;
+    }
+    return $result;
+}
 
 ?>

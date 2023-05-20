@@ -4,8 +4,10 @@ import useStyles from './styles';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/Logo.png';
 import { Helmet } from 'react-helmet';
-import LoginIcon from '@mui/icons-material/Login';
+//import LoginIcon from '@mui/icons-material/Login';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import CarRepair from '@mui/icons-material/CarRepair';
+import Rapport from '../../components/rapports/rapports';
 
 const Home = () => {
   const isMobile = useMediaQuery('(min-width:991px)');
@@ -22,7 +24,7 @@ const Home = () => {
       <Divider variant="middle" />
 
       <Grid className={isMobile ? classes.containerDesktop : classes.container}>
-        <Link className={classes.link} to="/login">
+        {/* <Link className={classes.link} to="/login">
           <Button
             variant="contained"
             startIcon={<LoginIcon />}
@@ -30,7 +32,7 @@ const Home = () => {
           >
             Logga in
           </Button>
-        </Link>
+        </Link> */}
 
         <Link className={classes.link} to="/kungalvform">
           <Button
@@ -51,7 +53,18 @@ const Home = () => {
             ICA AVVIKELSERAPPORT Helsingborg
           </Button>
         </Link>
+
+        <Link className={classes.link} to="/truckRepair">
+          <Button
+            variant="contained"
+            startIcon={<CarRepair />}
+            className={isMobile ? classes.buttonDekstop : classes.button}
+          >
+            Anmäl Fordon Skada
+          </Button>
+        </Link>
       </Grid>
+      <Rapport />
     </Grid>
   );
 };

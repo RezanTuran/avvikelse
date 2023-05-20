@@ -12,7 +12,7 @@ const TruckRepair = () => {
     e.preventDefault();
     let formData = new FormData();
 
-    formData.append('action', 'add');
+    formData.append('action', 'reportTruckRepair');
     formData.append('regNr', regNr);
     formData.append('repairArea', truckReapairArea);
     formData.append('explainRepair', explainRepair);
@@ -82,7 +82,11 @@ const TruckRepair = () => {
             setTruckImg(e.target.files[0]);
           }}
         />
-        <img src={URL.createObjectURL(truckImg)} alt="" />
+        <img
+          style={{ width: '200px' }}
+          src={URL.createObjectURL(truckImg)}
+          alt=""
+        />
         <button onClick={removeSelectedImage}>Ta bort bilden</button>
 
         <input type="submit" value="Skicka" />
