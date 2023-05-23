@@ -5,10 +5,13 @@ const Rapports = () => {
   const [rapports, setRapports] = useState([]);
 
   useEffect(() => {
-    Axios.get(process.env.REACT_APP_GET || '')
-      .then((Response: any) => {
-        setRapports(Response.data);
-        console.log(Response.data);
+    Axios.get(
+      'http://localhost:8888/recievers/truckRecievers.php?action=getTruckRepairs'
+    )
+      .then((response: any) => {
+        setRapports(response.data);
+
+        console.log(response);
       })
       .catch((err) => {
         console.log(err);
@@ -18,12 +21,13 @@ const Rapports = () => {
   return (
     <div>
       {rapports.map((rapport: any) => (
-        <div key={rapport.id}>
-          <h4>{rapport.firstName}</h4>
-          <h4>{rapport.sureName}</h4>
-          <h4>{rapport.phoneNumber}</h4>
-          <h4>{rapport.driverNumber}</h4>
-          <h4>{rapport.loadNumber}</h4>
+        <div>
+          <p>{rapport.regNr}</p>
+          <img
+            src={require(`../../assets/img/${rapport.image}`).default}
+            alt="React Logo"
+            style={{ height: 250, width: 200 }}
+          />
         </div>
       ))}
     </div>
