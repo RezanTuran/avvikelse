@@ -100,37 +100,38 @@ const HelsingborgForm = () => {
     e.preventDefault();
 
     let formData = new FormData();
+    formData.append('action', 'helsinborgForm');
 
     if (pickup === true) {
-      formData.append('drivingtype', 'Hämtning Helsingborg');
+      formData.append('drivingType', 'Hämtning Helsingborg');
     }
     if (distribution === true) {
-      formData.append('drivingtype', 'Distribution');
+      formData.append('drivingType', 'Distribution');
     }
 
-    formData.append('name', firstName);
-    formData.append('surename', sureName);
-    formData.append('phonenumber', phoneNumber);
-    formData.append('drivernumber', driverNumber);
-    formData.append('loadnumber', loadNumber);
+    formData.append('firstName', firstName);
+    formData.append('sureName', sureName);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('driverNumber', driverNumber);
+    formData.append('loadNumber', loadNumber);
     formData.append('date', date);
     formData.append('time', time);
-    formData.append('waittimeguard', waitTimeGuard);
-    formData.append('waittimeport', waitTimePort);
-    formData.append('waittimeunloader', waitTimeUnloader);
-    formData.append('waittimesearchgoods', waitTimeSearchGoods);
-    formData.append('waittimeomexport', waitTimeOmexPort);
-    formData.append('includedload', includedLoad);
-    formData.append('loadnotrady', loadNotRady);
-    formData.append('otherinfo', otherInfo);
+    formData.append('waitTimeGuard', waitTimeGuard);
+    formData.append('waitTimePort', waitTimePort);
+    formData.append('waitTimeUnloader', waitTimeUnloader);
+    formData.append('waitTimeSearchGoods', waitTimeSearchGoods);
+    formData.append('waitTimeOmexPort', waitTimeOmexPort);
+    formData.append('includedLoad', includedLoad);
+    formData.append('loadNotRady', loadNotRady);
+    formData.append('otherInfo', otherInfo);
 
     data = signCanvas.current.getTrimmedCanvas().toDataURL('image/png');
     formData.append('signature', data);
 
-    const url = process.env.REACT_APP_POST || '';
-    Axios.post(url, formData);
-    // .then((res) => console.log(res.data))
-    // .catch((err) => console.log(err));
+    const url = process.env.REACT_APP_POST_HSB || '';
+    Axios.post(url, formData)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const sendEmail = (e: any) => {
@@ -201,33 +202,33 @@ const HelsingborgForm = () => {
     } else {
       sendRapport(e);
       clearSignature();
-      emailjs
-        .sendForm(
-          process.env.REACT_APP_EMAIL_SERVICE_ID || '',
-          process.env.REACT_APP_HGB_EMAIL_TEMPLATE_ID || '',
-          e.target,
-          process.env.REACT_APP_EMAIL_USER_ID || ''
-        )
-        .then(
-          (result) => {
-            //console.log(result.text);
-            if (result.status === 200) {
-              Swal.fire({
-                icon: 'success',
-                text: 'Avvikelse rapporten har skickats',
-              });
-            }
-          },
-          (error) => {
-            //console.log(error.text);
-            if (error) {
-              Swal.fire({
-                icon: 'error',
-                text: 'Det gick inte skicka avvikelse rapporten vänligen försök igen',
-              });
-            }
-          }
-        );
+      // emailjs
+      //   .sendForm(
+      //     process.env.REACT_APP_EMAIL_SERVICE_ID || '',
+      //     process.env.REACT_APP_HGB_EMAIL_TEMPLATE_ID || '',
+      //     e.target,
+      //     process.env.REACT_APP_EMAIL_USER_ID || ''
+      //   )
+      //   .then(
+      //     (result) => {
+      //       //console.log(result.text);
+      //       if (result.status === 200) {
+      //         Swal.fire({
+      //           icon: 'success',
+      //           text: 'Avvikelse rapporten har skickats',
+      //         });
+      //       }
+      //     },
+      //     (error) => {
+      //       //console.log(error.text);
+      //       if (error) {
+      //         Swal.fire({
+      //           icon: 'error',
+      //           text: 'Det gick inte skicka avvikelse rapporten vänligen försök igen',
+      //         });
+      //       }
+      //     }
+      //   );
       e.target.reset();
     }
   };

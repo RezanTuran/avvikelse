@@ -11,7 +11,7 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import useStyles from './styles';
 import Axios from 'axios';
-import emailjs from 'emailjs-com';
+//import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
 import SignatureCanvas from 'react-signature-canvas';
@@ -122,23 +122,24 @@ const KungalvForm = () => {
 
     let formData = new FormData();
 
-    formData.append('name', firstName);
-    formData.append('surename', sureName);
-    formData.append('phonenumber', phoneNumber);
-    formData.append('drivernumber', driverNumber);
-    formData.append('loadnumber', loadNumber);
-    formData.append('deliveryarea', deliveryArea);
+    formData.append('action', 'kungalvForm');
+    formData.append('firstName', firstName);
+    formData.append('sureName', sureName);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('driverNumber', driverNumber);
+    formData.append('loadNumber', loadNumber);
+    formData.append('deliveryArea', deliveryArea);
     formData.append('date', date);
     formData.append('time', time);
-    formData.append('waittimeguard', waitTimeGuard);
-    formData.append('waittimeport', waitTimePort);
-    formData.append('waittimeunloader', waitTimeUnloader);
-    formData.append('waittimesearchgoods', waitTimeSearchGoods);
-    formData.append('waittimeemptygoods', waitTimeEmptyGoods);
-    formData.append('requiretime', requireTime);
+    formData.append('waitTimeGuard', waitTimeGuard);
+    formData.append('waitTimePort', waitTimePort);
+    formData.append('waitTimeUnloader', waitTimeUnloader);
+    formData.append('waitTimeSearchGoods', waitTimeSearchGoods);
+    formData.append('waitTimeEmptyGoods', waitTimeEmptyGoods);
+    formData.append('requireTime', requireTime);
     formData.append('mileage', mileage);
-    formData.append('storename', storeName);
-    formData.append('storenumber', storeNumber);
+    formData.append('storeName', storeName);
+    formData.append('storeNumber', storeNumber);
     formData.append('city', city);
     formData.append('quantity', quantity);
     formData.append('otherinfo', otherInfo);
@@ -147,9 +148,9 @@ const KungalvForm = () => {
     formData.append('signature', data);
 
     const url = process.env.REACT_APP_POST || '';
-    Axios.post(url, formData);
-    // .then((res) => console.log(res.data))
-    // .catch((err) => console.log(err));
+    Axios.post(url, formData)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const sendEmail = (e: any) => {
@@ -220,33 +221,33 @@ const KungalvForm = () => {
     } else {
       sendRapport(e);
       clearSignature();
-      emailjs
-        .sendForm(
-          process.env.REACT_APP_EMAIL_SERVICE_ID || '',
-          process.env.REACT_APP_EMAIL_TEMPLATE_ID || '',
-          e.target,
-          process.env.REACT_APP_EMAIL_USER_ID || ''
-        )
-        .then(
-          (result) => {
-            //console.log(result.text);
-            if (result.status === 200) {
-              Swal.fire({
-                icon: 'success',
-                text: 'Avvikelse rapporten har skickats',
-              });
-            }
-          },
-          (error) => {
-            //console.log(error.text);
-            if (error) {
-              Swal.fire({
-                icon: 'error',
-                text: 'Det gick inte skicka avvikelse rapporten vänligen försök igen',
-              });
-            }
-          }
-        );
+      // emailjs
+      //   .sendForm(
+      //     process.env.REACT_APP_EMAIL_SERVICE_ID || '',
+      //     process.env.REACT_APP_EMAIL_TEMPLATE_ID || '',
+      //     e.target,
+      //     process.env.REACT_APP_EMAIL_USER_ID || ''
+      //   )
+      //   .then(
+      //     (result) => {
+      //       //console.log(result.text);
+      //       if (result.status === 200) {
+      //         Swal.fire({
+      //           icon: 'success',
+      //           text: 'Avvikelse rapporten har skickats',
+      //         });
+      //       }
+      //     },
+      //     (error) => {
+      //       //console.log(error.text);
+      //       if (error) {
+      //         Swal.fire({
+      //           icon: 'error',
+      //           text: 'Det gick inte skicka avvikelse rapporten vänligen försök igen',
+      //         });
+      //       }
+      //     }
+      //);
       e.target.reset();
     }
   };
