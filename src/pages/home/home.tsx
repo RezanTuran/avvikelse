@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 //import LoginIcon from '@mui/icons-material/Login';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CarRepair from '@mui/icons-material/CarRepair';
-import Rapport from '../../components/rapports/rapports';
+import { AppRegistration, Login } from '@mui/icons-material';
 
 const Home = () => {
   const isMobile = useMediaQuery('(min-width:991px)');
@@ -63,8 +63,26 @@ const Home = () => {
             Anmäl Fordon Skada
           </Button>
         </Link>
+
+        <Link className={classes.link} to="/register">
+          <Button
+            variant="contained"
+            startIcon={<AppRegistration />}
+            className={isMobile ? classes.buttonDekstop : classes.button}
+          >
+            REGISTER
+          </Button>
+        </Link>
+        <Link className={classes.link} to="/login">
+          <Button
+            variant="contained"
+            startIcon={<Login />}
+            className={isMobile ? classes.buttonDekstop : classes.button}
+          >
+            Login
+          </Button>
+        </Link>
       </Grid>
-      <Rapport />
     </Grid>
   );
 };
