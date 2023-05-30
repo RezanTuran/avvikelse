@@ -20,7 +20,7 @@ const Rapports = () => {
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {rapports.map((rapport: any) => (
         <div
-          style={{ border: '4px solid black', margin: '5px', padding: '15px' }}
+          style={{ border: '3px solid black', margin: '5px', padding: '15px' }}
         >
           <img
             src={require(`../../assets/img/${rapport.image}`).default}
