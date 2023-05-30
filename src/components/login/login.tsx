@@ -1,45 +1,74 @@
-import React, { useState } from 'react';
-import Loginform from './loginForm';
-import Rapports from '../rapports';
+import React, { useState, useEffect } from 'react';
+import Axios from 'axios';
 
 const Login = () => {
-  const adminUser = {
-    email: process.env.REACT_APP_USERNAME,
-    password: process.env.REACT_APP_PASSWORD,
-  };
+  const [user, setUser] = useState(String);
+  const [password, setPassword] = useState(String);
+  const [error, setError] = useState(String);
+  const [msg, setMsg] = useState(String);
 
-  const [user, setUser] = useState({ email: '' });
-  const [error, setError] = useState('');
-
-  const Login = (details: any) => {
-    if (
-      details.email === adminUser.email &&
-      details.password === adminUser.password
-    ) {
-      setUser({
-        email: details.email,
+  useEffect(() => {
+    Axios.get(
+      'http://localhost:8888/recievers/loginRecievers.php/?action=loginUser'
+    )
+      .then((response: any) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    } else {
-      setError('Fel användarnamn eller lösenord');
+  }, []);
+
+  const handleInputChange = (e: any, type: any) => {
+    switch (type) {
+      case 'user':
+        setError('');
+        setUser(e.target.value);
+        if (e.target.value === '') {
+          setError('Username is blank');
+        }
+        break;
+      case 'password':
+        setError('');
+        setPassword(e.target.value);
+        if (e.target.value === '') {
+          setError('Password is blank');
+        }
+        break;
+      default:
     }
   };
 
-  const Logout = () => {
-    setUser({ email: '' });
-  };
+  // const loginSubmit = () => {
+  //   if (user !== '' && password !== '') {
+  //   } else {
+  //     setError('All field is required');
+  //   }
+  // };
 
   return (
     <div>
-      {user.email !== '' ? (
-        <div>
-          <h2>{user.email}</h2>
-          <Rapports />
-          <button onClick={Logout}>Logout</button>
-        </div>
-      ) : (
-        <Loginform Login={Login} error={error} />
-      )}
+      <h1>Login</h1>
+      <br />
+      {error !== '' ? <span>{error}</span> : <span>{msg}</span>}
+      <br />
+      <input
+        type="text"
+        placeholder="Username"
+        value={user}
+        onChange={(e: any) => handleInputChange(e, 'user')}
+      />
+      <br />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e: any) => handleInputChange(e, 'password')}
+      />
+      <br />
+      <input type="submit" value="Login" />
     </div>
   );
 };
+
 export default Login;
